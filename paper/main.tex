@@ -1,0 +1,274 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.1in]{geometry}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[capitalise,nameinlink]{cleveref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rad}{R}
+
+\title[Randomized smoothing at high confidence]{Randomized smoothing at high confidence: the Gaussian is optimal for every noise law}
+\author{Yitzchak Shmalo}
+\date{\today}
+
+\begin{document}
+
+\begin{abstract}
+Randomized smoothing certifies a classifier by averaging a base classifier over a noise law $q$ on $\R^d$. We
+consider certificates that hold for every base classifier and require only that the top class has probability
+at least $1-\alpha$ under the noise. We prove that if $\E\|\eta\|_2^2\le d\sigma^2$ for $\eta\sim q$, then for
+$0<\alpha<1/4$ and $d\ge 1012\,\alpha^{-2}\log(16/\alpha)$ no such certificate exceeds
+$8\sigma\sqrt{\log(16/\alpha)}\,d^{1/p-1/2}$ in the $\ell_p$ norm, $2\le p\le\infty$. The Gaussian
+$N(0,\sigma^2 I)$ certifies $\sigma\Phi^{-1}(1-\alpha)\,d^{1/p-1/2}$, so it is optimal up to an absolute
+constant factor at every confidence level. Earlier bounds for general noise laws allow the certified radius at
+fixed noise level to grow like $\alpha^{-1/2}$ as $\alpha\to0$; the correct rate is $(\log 1/\alpha)^{1/2}$.
+The proof uses only the second moment of $q$: no product structure, symmetry, density or log-concavity.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Let $f\colon\R^d\to\mathcal{Y}$ be a measurable classifier and let $q$ be a Borel probability measure on
+$\R^d$. The smoothed classifier $g(x)=\arg\max_{c}\PP_{\eta\sim q}(f(x+\eta)=c)$ is the object of
+randomized smoothing \cite{LAG19,LCWC19,CRK19}. For the Gaussian $q=N(0,\sigma^2I)$, Cohen, Rosenfeld and
+Kolter \cite{CRK19} showed by the Neyman--Pearson lemma that if the top class $A$ has probability $p_A>1/2$
+at $x$, then $g(x+\delta)=A$ whenever $\|\delta\|_2<\sigma\Phi^{-1}(p_A)$, and that this radius cannot be
+improved using $p_A$ alone. Since the $\ell_\infty$ ball of radius $r$ lies in the $\ell_2$ ball of radius
+$r\sqrt d$, the same noise certifies the $\ell_\infty$ radius $\sigma\Phi^{-1}(p_A)/\sqrt d$.
+
+Whether another noise law does better for $\ell_p$, $p>2$, has been studied from several directions. Blum,
+Dick, Manoj and Zhang \cite{BDMZ20} proved that a noise law which certifies $\ell_p$ radius $\varepsilon$ for
+every base classifier with score gap $\delta$ must have $\E\eta_i^2=\Omega(d^{1-2/p}\varepsilon^2
+(1-\delta)/\delta^2)$ for most coordinates $i$. Kumar, Levine, Goldstein and Feizi \cite{KLGF20} showed that
+for a large class of product noise laws the certified $\ell_p$ radius decreases as $O(d^{1/p-1/2})$. Yang et
+al.\ \cite{YDHSRL20} obtained a bound of the same order in $d$ for a broad class of smoothing schemes that use
+only the probability of the top class, including schemes whose noise depends on the input, and Wu,
+Bojchevski, Kuvshinov and G\"unnemann \cite{WBKG21} gave upper bounds of order $d^{-1/2}$ for the $\ell_2$
+radius under continuous symmetric noise.
+
+Read at a fixed noise level $\sigma$ per coordinate and confidence $p_A=1-\alpha$, so that the score gap is
+$1-2\alpha$, the bound of \cite{BDMZ20} gives $\varepsilon=O(\sigma d^{1/p-1/2}\alpha^{-1/2})$, while the
+Gaussian certifies $\sigma\Phi^{-1}(1-\alpha)d^{1/p-1/2}\sim\sigma\sqrt{2\log(1/\alpha)}\,d^{1/p-1/2}$. The
+gap between $\alpha^{-1/2}$ and $(\log1/\alpha)^{1/2}$ is the question of whether a non-Gaussian law can buy
+more radius at high confidence. The theorem below shows it cannot.
+
+\begin{definition}\label{def:radius}
+Let $\|\cdot\|$ be a norm on $\R^d$ and $0<\alpha<1/2$. The \emph{certified radius} $\Rad_q(\alpha,\|\cdot\|)$
+is the supremum of $\varepsilon\ge0$ with the following property: for every measurable
+$f\colon\R^d\to\mathcal{Y}$, every $x\in\R^d$ and every class $A$ with $\PP_{\eta\sim q}(f(x+\eta)=A)\ge1-\alpha$,
+one has $\PP_{\eta\sim q}(f(x+\delta+\eta)=A)>1/2$ for all $\|\delta\|\le\varepsilon$.
+\end{definition}
+
+The condition $\PP(f(x+\delta+\eta)=A)>1/2$ forces $g(x+\delta)=A$, so $\Rad_q$ is the largest radius that can
+be certified from the confidence level alone, for every base classifier. By the Cohen--Rosenfeld--Kolter bound,
+$\Rad_{N(0,\sigma^2I)}(\alpha,\|\cdot\|_2)=\sigma\Phi^{-1}(1-\alpha)$.
+
+\begin{theorem}\label{thm:main}
+Let $q$ be a Borel probability measure on $\R^d$ with $\E_{\eta\sim q}\|\eta\|_2^2\le d\sigma^2$, where
+$\sigma>0$. Let $0<\alpha<1/4$ and
+\[
+d\ \ge\ \frac{1012\,\log(16/\alpha)}{\alpha^{2}} .
+\]
+Then for every $2\le p\le\infty$,
+\[
+\Rad_q(\alpha,\|\cdot\|_p)\ \le\ 8\,\sigma\sqrt{\log(16/\alpha)}\;d^{1/p-1/2}.
+\]
+\end{theorem}
+
+\begin{corollary}\label{cor:gauss}
+Under the assumptions of \cref{thm:main}, for every $2\le p\le\infty$,
+\[
+\Rad_q(\alpha,\|\cdot\|_p)\ \le\ 25\,\Rad_{N(0,\sigma^2I)}(\alpha,\|\cdot\|_p),
+\]
+and the ratio of the two bounds tends to at most $8/\sqrt2<5.7$ as $\alpha\to0$.
+\end{corollary}
+
+The constants are not optimized. Only the second moment of $q$ enters; the noise may be any law, with atoms,
+heavy tails or strong dependence between coordinates. The proof is an explicit construction: a base
+classifier that has probability at least $1-\alpha$ of the top class at $x$ and probability at most $1/2$ at a
+point $x+v$ with $\|v\|_\infty=\varepsilon$. The shift $v$ is a multiple of a sign vector, which is why the
+$\ell_p$ bounds follow from the $\ell_\infty$ one.
+
+\section{A criterion for failure}
+
+\begin{lemma}\label{lem:criterion}
+Let $\|\cdot\|$ be a norm on $\R^d$. Suppose there are a Borel set $B_0\subset\R^d$ and a vector $v$ with
+$q(B_0)\ge1/2$ and $q(v+B_0)\le\alpha$. Then $\Rad_q(\alpha,\|\cdot\|)\le\|v\|$.
+\end{lemma}
+
+\begin{proof}
+Fix $x$ and two classes $A\ne B$. Let $f(y)=B$ if $y\in x+v+B_0$ and $f(y)=A$ otherwise. Then
+$\PP(f(x+\eta)=B)=q(v+B_0)\le\alpha$, so $\PP(f(x+\eta)=A)\ge1-\alpha$. At the point $x+v$,
+$\PP(f(x+v+\eta)=B)=q(B_0)\ge1/2$, so $\PP(f(x+v+\eta)=A)\le1/2$. Hence no $\varepsilon\ge\|v\|$ has the
+property of \cref{def:radius}.
+\end{proof}
+
+\section{Proof of the theorem}
+
+Throughout, $\eta\sim q$, $B_r=\{y:\|y\|_2\le r\}$, and $\varepsilon>0$ is a number with $\varepsilon\le\sigma$ to
+be fixed at the end.
+
+\begin{lemma}[a thin shell]\label{lem:shell}
+There is $\rho\in[2\sigma\sqrt d,\,3\sigma\sqrt d-\varepsilon\sqrt d\,]$ with $q(B_\rho)\ge3/4$ and
+\[
+q\bigl(\rho<\|\eta\|_2\le\rho+\varepsilon\sqrt d\bigr)\ \le\ \frac{2\varepsilon}{\sigma}.
+\]
+\end{lemma}
+
+\begin{proof}
+By Markov's inequality $q(\|\eta\|_2>2\sigma\sqrt d)\le\E\|\eta\|_2^2/(4d\sigma^2)\le1/4$, so $q(B_\rho)\ge3/4$
+for every $\rho\ge2\sigma\sqrt d$. The interval $[2\sigma\sqrt d,3\sigma\sqrt d]$ contains
+$N=\lfloor\sigma/\varepsilon\rfloor\ge1$ disjoint half-open intervals $(\rho_k,\rho_k+\varepsilon\sqrt d]$,
+$\rho_k=2\sigma\sqrt d+k\varepsilon\sqrt d$, $0\le k<N$. The corresponding shells are disjoint, so one of them
+has mass at most $1/N\le2\varepsilon/\sigma$, using $\lfloor t\rfloor\ge t/2$ for $t\ge1$.
+\end{proof}
+
+Fix $\rho$ as in \cref{lem:shell} and let $\mu$ be the law of $\eta$ conditioned on $\eta\in B_\rho$. For a sign
+vector $s\in\{-1,1\}^d$ write $X_s(y)=\langle y,s\rangle/\sqrt d$. Put
+\[
+T=\sigma\sqrt{18\log24},\qquad T'=\sigma\sqrt{18\log(16/\alpha)} .
+\]
+
+\begin{lemma}[a direction]\label{lem:direction}
+There is $s\in\{-1,1\}^d$ with $\mu(X_s>T)\le1/3$ and $\mu(X_s<-T')\le\alpha/2$.
+\end{lemma}
+
+\begin{proof}
+Let $s$ be uniform on $\{-1,1\}^d$, independent of $\eta\sim\mu$. For fixed $y\in B_\rho$, $\langle y,s\rangle$ is a
+sum of independent bounded terms $s_iy_i$, and Hoeffding's inequality gives, for $u>0$,
+\[
+\PP_s\bigl(X_s(y)>u\bigr)\le\exp\Bigl(-\frac{u^2d}{2\|y\|_2^2}\Bigr)\le\exp\Bigl(-\frac{u^2}{18\sigma^2}\Bigr),
+\]
+since $\|y\|_2\le\rho\le3\sigma\sqrt d$; the same bound holds for $\PP_s(X_s(y)<-u)$. Integrating over $y$,
+$\E_s\,\mu(X_s>T)\le1/24$ and $\E_s\,\mu(X_s<-T')\le\alpha/16$. By Markov's inequality in $s$,
+$\PP_s(\mu(X_s>T)>1/3)\le1/8$ and $\PP_s(\mu(X_s<-T')>\alpha/2)\le1/8$, so some $s$ satisfies both bounds.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:main}]
+Take $s$ from \cref{lem:direction} and set
+\[
+B_0=\{y\in B_\rho:\ X_s(y)\le T\},\qquad \varepsilon=\frac{T+T'}{\sqrt d},\qquad v=-\varepsilon s .
+\]
+First, $q(B_0)=q(B_\rho)\,\mu(X_s\le T)\ge\frac34\cdot\frac23=\frac12$.
+
+Next let $y=v+z$ with $z\in B_0$. Then $\|y\|_2\le\rho+\|v\|_2=\rho+\varepsilon\sqrt d$ and
+$X_s(y)=X_s(z)-\varepsilon\sqrt d\le T-(T+T')=-T'$. So $y$ lies either in the shell
+$\{\rho<\|y\|_2\le\rho+\varepsilon\sqrt d\}$ or in $B_\rho\cap\{X_s\le-T'\}$, and
+\[
+q(v+B_0)\ \le\ \frac{2\varepsilon}{\sigma}+q(B_\rho)\,\mu(X_s\le-T')\ \le\ \frac{2\varepsilon}{\sigma}+\frac{\alpha}{2},
+\]
+where $\mu(X_s\le-T')\le\alpha/2$ holds by the proof of \cref{lem:direction}, the Hoeffding bound being the same
+for the closed event.
+
+It remains to check $2\varepsilon/\sigma\le\alpha/2$ and $\varepsilon\le\sigma$. For $\alpha<1/4$ we have
+$\log(16/\alpha)>\log64$, hence
+\[
+\frac{T+T'}{\sigma}=\sqrt{18}\Bigl(\sqrt{\log24}+\sqrt{\log(16/\alpha)}\Bigr)
+\le\sqrt{18}\Bigl(\sqrt{\tfrac{\log24}{\log64}}+1\Bigr)\sqrt{\log(16/\alpha)}\le 7.952\sqrt{\log(16/\alpha)} .
+\]
+The condition $\varepsilon\le\alpha\sigma/4$ reads $\sqrt d\ge4(T+T')/(\alpha\sigma)$, which holds when
+$d\ge16\cdot7.952^2\,\alpha^{-2}\log(16/\alpha)$, and $16\cdot7.952^2<1012$. Then also $\varepsilon\le\sigma$.
+So $q(v+B_0)\le\alpha$, and \cref{lem:criterion} gives, since $v$ is $\varepsilon$ times a sign vector,
+\[
+\Rad_q(\alpha,\|\cdot\|_p)\le\|v\|_p=\varepsilon\,d^{1/p}=\frac{T+T'}{\sigma}\,\sigma\,d^{1/p-1/2}
+\le8\,\sigma\sqrt{\log(16/\alpha)}\,d^{1/p-1/2}.\qedhere
+\]
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:gauss}]
+For $p\ge2$, $\|\delta\|_2\le d^{1/2-1/p}\|\delta\|_p$, so the Gaussian certifies the $\ell_p$ radius
+$\sigma\Phi^{-1}(1-\alpha)\,d^{1/p-1/2}$. The function $\alpha\mapsto8\sqrt{\log(16/\alpha)}/\Phi^{-1}(1-\alpha)$ is
+at most $24.19$ on $(0,1/4)$, with the largest values near $\alpha=1/4$, and tends to $8/\sqrt2$ as $\alpha\to0$
+because $\Phi^{-1}(1-\alpha)\sim\sqrt{2\log(1/\alpha)}$.
+\end{proof}
+
+\section{Remarks}
+
+\begin{remark}
+The Gaussian value $\sigma\Phi^{-1}(1-\alpha)/\sqrt d$ in $\ell_\infty$ is exact for $N(0,\sigma^2I)$: the shift
+$v=\varepsilon(1,\dots,1)$ and the half-space classifier $f(y)=B$ on $\{\langle y-x,(1,\dots,1)\rangle\ge
+\sigma\sqrt d\,\Phi^{-1}(1-\alpha)\}$ attain it. \Cref{thm:main} says that no other law with the same average
+per-coordinate second moment improves this by more than a constant factor, at any confidence level.
+\end{remark}
+
+\begin{remark}
+The noise level is measured by the average second moment $d^{-1}\E\|\eta\|_2^2$, as in \cite{KLGF20}; the bound
+of \cite{BDMZ20} is stated for most individual coordinates.
+\end{remark}
+
+\begin{remark}
+The condition $d\ge C\alpha^{-2}\log(1/\alpha)$ comes from the shell step, which needs a shell of relative
+mass $O(\alpha)$, and is not optimized. Three questions remain: whether the Gaussian is exactly optimal among
+laws with a given second moment; whether the condition on $d$ can be removed; and what happens for
+input-dependent smoothing, where the noise law varies with $x$ \cite{SKH21}. The argument above uses a single
+law $q$ at $x$ and at $x+v$ and does not apply directly to the last case.
+\end{remark}
+
+\section*{Acknowledgments and funding}
+This research was supported by the European Research Council (ERC) under the European Union's Horizon Europe
+research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of the
+Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus
+Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant
+4101/25).
+
+\section*{Declaration of competing interest}
+The author holds equity in Heights Labs and in Convex Nexus Capital and has a management role at Convex Nexus
+Capital. These entities are included in the funding declaration above.
+
+\section*{Declaration of generative AI and AI-assisted technologies}
+The paper comes out of Math Brain, an ongoing project on the use of AI systems for research mathematics. In
+November 2026 Claude models (Anthropic), working in Claude Code, proved the theorem, checked the construction
+numerically, and wrote the paper. The author directed the work and is responsible for the content of the paper
+and for decisions concerning its dissemination.
+
+\begin{thebibliography}{99}
+
+\bibitem{BDMZ20}
+A.~Blum, T.~Dick, N.~Manoj and H.~Zhang, Random smoothing might be unable to certify $\ell_\infty$ robustness
+for high-dimensional images, \emph{J. Mach. Learn. Res.} 21 (2020), no.~211, 1--21. arXiv:2002.03517.
+
+\bibitem{CRK19}
+J.~Cohen, E.~Rosenfeld and Z.~Kolter, Certified adversarial robustness via randomized smoothing, in
+\emph{Proceedings of the 36th International Conference on Machine Learning}, PMLR 97 (2019), 1310--1320.
+
+\bibitem{KLGF20}
+A.~Kumar, A.~Levine, T.~Goldstein and S.~Feizi, Curse of dimensionality on randomized smoothing for certifiable
+robustness, in \emph{Proceedings of the 37th International Conference on Machine Learning}, PMLR 119 (2020),
+5458--5467. arXiv:2002.03239.
+
+\bibitem{LAG19}
+M.~Lecuyer, V.~Atlidakis, R.~Geambasu, D.~Hsu and S.~Jana, Certified robustness to adversarial examples with
+differential privacy, in \emph{2019 IEEE Symposium on Security and Privacy}, 656--672.
+
+\bibitem{LCWC19}
+B.~Li, C.~Chen, W.~Wang and L.~Carin, Certified adversarial robustness with additive noise, in \emph{Advances in
+Neural Information Processing Systems} 32 (2019).
+
+\bibitem{SKH21}
+P.~S\'uken\'ik, A.~Kuvshinov and S.~G\"unnemann, Intriguing properties of input-dependent randomized smoothing,
+in \emph{Proceedings of the 39th International Conference on Machine Learning}, PMLR 162 (2022). arXiv:2110.05365.
+
+\bibitem{WBKG21}
+Y.~Wu, A.~Bojchevski, A.~Kuvshinov and S.~G\"unnemann, Completing the picture: randomized smoothing suffers from
+the curse of dimensionality for a large family of distributions, in \emph{Proceedings of the 24th International
+Conference on Artificial Intelligence and Statistics}, PMLR 130 (2021).
+
+\bibitem{YDHSRL20}
+G.~Yang, T.~Duan, J.~E.~Hu, H.~Salman, I.~Razenshteyn and J.~Li, Randomized smoothing of all shapes and sizes, in
+\emph{Proceedings of the 37th International Conference on Machine Learning}, PMLR 119 (2020), 10693--10705.
+
+\end{thebibliography}
+
+\end{document}
