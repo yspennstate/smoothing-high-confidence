@@ -58,7 +58,8 @@ for a large class of product noise laws the certified $\ell_p$ radius decreases 
 al.\ \cite{YDHSRL20} obtained a bound of the same order in $d$ for a broad class of smoothing schemes that use
 only the probability of the top class, including schemes whose noise depends on the input, and Wu,
 Bojchevski, Kuvshinov and G\"unnemann \cite{WBKG21} gave upper bounds of order $d^{-1/2}$ for the $\ell_2$
-radius under continuous symmetric noise.
+radius under continuous symmetric noise. Hayes \cite{Hay20} showed, for certificates built from divergences
+between smoothing measures, that the certifiable $\ell_p$ radius vanishes as $p$ grows.
 
 Read at a fixed noise level $\sigma$ per coordinate and confidence $p_A=1-\alpha$, so that the score gap is
 $1-2\alpha$, the bound of \cite{BDMZ20} gives $\varepsilon=O(\sigma d^{1/p-1/2}\alpha^{-1/2})$, while the
@@ -215,7 +216,10 @@ The condition $d\ge C\alpha^{-2}\log(1/\alpha)$ comes from the shell step, which
 mass $O(\alpha)$, and is not optimized. Three questions remain: whether the Gaussian is exactly optimal among
 laws with a given second moment; whether the condition on $d$ can be removed; and what happens for
 input-dependent smoothing, where the noise law varies with $x$ \cite{SKH21}. The argument above uses a single
-law $q$ at $x$ and at $x+v$ and does not apply directly to the last case.
+law $q$ at $x$ and at $x+v$ and does not apply directly to the last case. Nor does it cover certificates that
+use more than the probability of the top class: the double-sampling certificates of Li, Zhang, Xie and Li
+\cite{LZXL22} also use the probability of the top class under a second noise law, and certify an $\ell_2$
+radius of order $\sqrt d$ under additional assumptions on the base classifier.
 \end{remark}
 
 \section*{Acknowledgments and funding}
@@ -250,6 +254,10 @@ for high-dimensional images, \emph{J. Mach. Learn. Res.} 21 (2020), no.~211, 1--
 J.~Cohen, E.~Rosenfeld and Z.~Kolter, Certified adversarial robustness via randomized smoothing, in
 \emph{Proceedings of the 36th International Conference on Machine Learning}, PMLR 97 (2019), 1310--1320.
 
+\bibitem{Hay20}
+J.~Hayes, Extensions and limitations of randomized smoothing for robustness guarantees, in \emph{2020 IEEE/CVF
+Conference on Computer Vision and Pattern Recognition Workshops}, 2020. arXiv:2006.04208.
+
 \bibitem{KLGF20}
 A.~Kumar, A.~Levine, T.~Goldstein and S.~Feizi, Curse of dimensionality on randomized smoothing for certifiable
 robustness, in \emph{Proceedings of the 37th International Conference on Machine Learning}, PMLR 119 (2020),
@@ -262,6 +270,10 @@ differential privacy, in \emph{2019 IEEE Symposium on Security and Privacy}, 656
 \bibitem{LCWC19}
 B.~Li, C.~Chen, W.~Wang and L.~Carin, Certified adversarial robustness with additive noise, in \emph{Advances in
 Neural Information Processing Systems} 32 (2019).
+
+\bibitem{LZXL22}
+L.~Li, J.~Zhang, T.~Xie and B.~Li, Double sampling randomized smoothing, in \emph{Proceedings of the 39th
+International Conference on Machine Learning}, PMLR 162 (2022). arXiv:2206.07912.
 
 \bibitem{SKH21}
 P.~S\'uken\'ik, A.~Kuvshinov and S.~G\"unnemann, Intriguing properties of input-dependent randomized smoothing,
