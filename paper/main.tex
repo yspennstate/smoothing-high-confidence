@@ -20,7 +20,7 @@
 
 \title[Randomized smoothing at high confidence]{Randomized smoothing at high confidence: the Gaussian is optimal for every noise law}
 \author{Yitzchak Shmalo}
-\date{\today}
+\date{November 2026}
 
 \usepackage{xurl}
 \setlength{\emergencystretch}{3em}
@@ -148,7 +148,7 @@ T=\sigma\sqrt{18\log24},\qquad T'=\sigma\sqrt{18\log(16/\alpha)} .
 \]
 
 \begin{lemma}[a direction]\label{lem:direction}
-There is $s\in\{-1,1\}^d$ with $\mu(X_s>T)\le1/3$ and $\mu(X_s<-T')\le\alpha/2$.
+There is $s\in\{-1,1\}^d$ with $\mu(X_s>T)\le1/3$ and $\mu(X_s\le-T')\le\alpha/2$.
 \end{lemma}
 
 \begin{proof}
@@ -157,9 +157,9 @@ sum of independent bounded terms $s_iy_i$, and Hoeffding's inequality gives, for
 \[
 \PP_s\bigl(X_s(y)>u\bigr)\le\exp\Bigl(-\frac{u^2d}{2\|y\|_2^2}\Bigr)\le\exp\Bigl(-\frac{u^2}{18\sigma^2}\Bigr),
 \]
-since $\|y\|_2\le\rho\le3\sigma\sqrt d$; the same bound holds for $\PP_s(X_s(y)<-u)$. Integrating over $y$,
-$\E_s\,\mu(X_s>T)\le1/24$ and $\E_s\,\mu(X_s<-T')\le\alpha/16$. By Markov's inequality in $s$,
-$\PP_s(\mu(X_s>T)>1/3)\le1/8$ and $\PP_s(\mu(X_s<-T')>\alpha/2)\le1/8$, so some $s$ satisfies both bounds.
+since $\|y\|_2\le\rho\le3\sigma\sqrt d$; the same bound holds for $\PP_s(X_s(y)\le-u)$. Integrating over $y$,
+$\E_s\,\mu(X_s>T)\le1/24$ and $\E_s\,\mu(X_s\le-T')\le\alpha/16$. By Markov's inequality in $s$,
+$\PP_s(\mu(X_s>T)>1/3)\le1/8$ and $\PP_s(\mu(X_s\le-T')>\alpha/2)\le1/8$, so some $s$ satisfies both bounds.
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:main}]
@@ -173,10 +173,9 @@ Next let $y=v+z$ with $z\in B_0$. Then $\|y\|_2\le\rho+\|v\|_2=\rho+\varepsilon\
 $X_s(y)=X_s(z)-\varepsilon\sqrt d\le T-(T+T')=-T'$. So $y$ lies either in the shell
 $\{\rho<\|y\|_2\le\rho+\varepsilon\sqrt d\}$ or in $B_\rho\cap\{X_s\le-T'\}$, and
 \[
-q(v+B_0)\ \le\ \frac{2\varepsilon}{\sigma}+q(B_\rho)\,\mu(X_s\le-T')\ \le\ \frac{2\varepsilon}{\sigma}+\frac{\alpha}{2},
+q(v+B_0)\ \le\ \frac{2\varepsilon}{\sigma}+q(B_\rho)\,\mu(X_s\le-T')\ \le\ \frac{2\varepsilon}{\sigma}+\frac{\alpha}{2}
 \]
-where $\mu(X_s\le-T')\le\alpha/2$ holds by the proof of \cref{lem:direction}, the Hoeffding bound being the same
-for the closed event.
+by \cref{lem:shell,lem:direction}.
 
 It remains to check $2\varepsilon/\sigma\le\alpha/2$ and $\varepsilon\le\sigma$. For $\alpha<1/4$ we have
 $\log(16/\alpha)>\log64$, hence
